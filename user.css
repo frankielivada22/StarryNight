@@ -297,3 +297,21 @@
     opacity: 0;
   }
 }
+
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: var(--spice-star, white);
+  border-radius: 50%;
+  opacity: 0;
+  animation: starFadeInOut 8s infinite linear;
+  filter: blur(1px);
+  transition: transform 0.6s ease;
+}
+
+@keyframes starFadeInOut {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
