@@ -27,7 +27,7 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
   // Wait for layout to update
   requestAnimationFrame(() => {
     // Create 500 stars with independent fade in/out timing
-    const numStars = 500;
+    const numStars = 150;
     for (let i = 0; i < numStars; i++) {
       const star = document.createElement('div');
       star.classList.add('star');
@@ -90,7 +90,7 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
 // Move stars away slightly if the mouse gets near them
 document.addEventListener('mousemove', moveStars);
 function moveStars(event) {
-  const numStars = 500; // the number of stars we created
+  const numStars = 150; // the number of stars we created
   for (let i = 0; i < numStars; i++) {
     const star = document.getElementById('star' + i);
     if (star) {
