@@ -1,4 +1,4 @@
-# My Customized Starry Night Theme
+# My Customized Spicetify Starry Night Theme
 
 This project is a personalized version of the original starry night theme. I’ve modified several aspects of the code and style to make it my own. Below is a list of changes and customizations I've implemented:
 
