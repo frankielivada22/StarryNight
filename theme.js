@@ -12,6 +12,41 @@ function random(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+// Cache star elements here
+const starElements = [];
+let isMoving = false;
+let lastMouseEvent;
+
+// Throttled mousemove event using requestAnimationFrame
+document.addEventListener('mousemove', (event) => {
+  lastMouseEvent = event;
+  if (!isMoving) {
+    isMoving = true;
+    requestAnimationFrame(() => {
+      moveStars(lastMouseEvent);
+      isMoving = false;
+    });
+  }
+});
+
+function moveStars(event) {
+  starElements.forEach(star => {
+    const starRect = star.getBoundingClientRect();
+    const starX = starRect.left + starRect.width / 2;
+    const starY = starRect.top + starRect.height / 2;
+    const dx = event.clientX - starX;
+    const dy = event.clientY - starY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < 50) {
+      const angle = Math.atan2(starY - event.clientY, starX - event.clientX);
+      const moveDistance = Math.min(3, 50 / distance);
+      star.style.transform = `translate(${Math.cos(angle) * moveDistance}px, ${Math.sin(angle) * moveDistance}px)`;
+    } else {
+      star.style.transform = '';
+    }
+  });
+}
+
 waitForElement(['.Root__top-container'], ([topContainer]) => {
   const r = document.documentElement;
   const rs = window.getComputedStyle(r);
@@ -26,7 +61,7 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
 
   // Wait for layout to update
   requestAnimationFrame(() => {
-    // Create 500 stars with independent fade in/out timing
+    // Create 150 stars with independent fade in/out timing
     const numStars = 150;
     for (let i = 0; i < numStars; i++) {
       const star = document.createElement('div');
@@ -38,6 +73,8 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
       star.style.animationDelay = `${Math.random() * 8}s`;
       star.style.animationDuration = `${(Math.random() * 3) + 5}s`;
       backgroundContainer.appendChild(star);
+      // Cache the star element
+      starElements.push(star);
     }
     
     // Create shooting stars with increased blur and reduced prominence
@@ -86,25 +123,3 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
     }
   });
 });
-
-// Move stars away slightly if the mouse gets near them
-document.addEventListener('mousemove', moveStars);
-function moveStars(event) {
-  const numStars = 150; // the number of stars we created
-  for (let i = 0; i < numStars; i++) {
-    const star = document.getElementById('star' + i);
-    if (star) {
-      const starRect = star.getBoundingClientRect();
-      const starX = starRect.left + starRect.width / 2;
-      const starY = starRect.top + starRect.height / 2;
-      const distance = Math.sqrt(Math.pow(event.clientX - starX, 2) + Math.pow(event.clientY - starY, 2));
-      if (distance < 50) {
-        const angle = Math.atan2(starY - event.clientY, starX - event.clientX);
-        const moveDistance = Math.min(3, 50 / distance);
-        star.style.transform = `translate(${Math.cos(angle) * moveDistance}px, ${Math.sin(angle) * moveDistance}px)`;
-      } else {
-        star.style.transform = '';
-      }
-    }
-  }
-}
